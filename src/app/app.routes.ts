@@ -1,0 +1,52 @@
+import { Routes } from '@angular/router';
+import { authGuard } from './core/guards/auth.guard';
+
+export const routes: Routes = [
+  {
+    path: '',
+    loadComponent: () => import('./app.routes.presentation').then(m => m.PresentationComponent)
+  },
+  {
+    path: 'login',
+    loadComponent: () => import('./modules/auth/login/login.component').then(m => m.LoginComponent)
+  },
+  {
+    path: 'dashboard',
+    canActivate: [authGuard],
+    children: [
+      {
+        path: 'doctor',
+        canActivate: [authGuard],
+        data: { roles: ['doctor'] },
+        loadComponent: () => import('./modules/doctor/calendar/doctor-calendar.component').then(m => m.DoctorCalendarComponent)
+      },
+      {
+        path: 'patient',
+        canActivate: [authGuard],
+        data: { roles: ['patient'] },
+        loadComponent: () => import('./modules/dashboard/patient-placeholder.component').then(m => m.PatientPlaceholderComponent)
+      },
+      {
+        path: 'admin',
+        canActivate: [authGuard],
+        data: { roles: ['admin'] },
+        loadComponent: () => import('./modules/dashboard/admin-placeholder.component').then(m => m.AdminPlaceholderComponent)
+      },
+      {
+        path: 'nurse',
+        canActivate: [authGuard],
+        data: { roles: ['nurse'] },
+        loadComponent: () => import('./modules/dashboard/nurse-placeholder.component').then(m => m.NursePlaceholderComponent)
+      },
+      {
+        path: '',
+        redirectTo: 'doctor',
+        pathMatch: 'full'
+      }
+    ]
+  },
+  {
+    path: '**',
+    redirectTo: ''
+  }
+];
