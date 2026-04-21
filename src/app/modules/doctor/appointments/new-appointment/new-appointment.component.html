@@ -1,0 +1,322 @@
+<div class="min-h-screen" style="background: linear-gradient(135deg, #f0fdfa 0%, #ffffff 50%, #f8fafc 100%);">
+
+  <!-- Success overlay -->
+  <div *ngIf="successMsg()" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 animate-fade-in">
+    <div class="bg-white rounded-3xl shadow-2xl p-10 flex flex-col items-center space-y-4 max-w-sm mx-4">
+      <div class="w-20 h-20 rounded-full flex items-center justify-center" style="background: linear-gradient(135deg, #14b8a6, #0d9488);">
+        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+        </svg>
+      </div>
+      <h3 class="text-2xl font-extrabold text-gray-900">¡Cita Agendada!</h3>
+      <p class="text-gray-500 text-center text-sm">La cita fue registrada exitosamente. Redirigiendo al calendario...</p>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="bg-white shadow-lg border-b-4 border-teal-500 sticky top-0 z-40">
+    <div class="max-w-4xl mx-auto px-4 py-4 flex items-center space-x-4">
+      <button (click)="goBack()" class="w-10 h-10 rounded-xl hover:bg-gray-100 flex items-center justify-center transition-colors">
+        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+        </svg>
+      </button>
+      <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg,#14b8a6,#0d9488)">
+        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="text-xl font-extrabold text-gray-900">Nueva Cita Especializada</h1>
+        <p class="text-xs text-gray-500">Registro de cita médica · Paso {{ step() }} de 3</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 py-10">
+
+    <!-- Step progress -->
+    <div class="flex items-center justify-center mb-10">
+      <ng-container *ngFor="let s of [1,2,3]; let last = last">
+        <div class="flex flex-col items-center">
+          <div class="w-11 h-11 rounded-full flex items-center justify-center font-extrabold text-sm transition-all duration-300"
+               [class.text-white]="step() >= s"
+               [class.text-gray-400]="step() < s"
+               [class.border-2]="step() < s"
+               [class.border-gray-200]="step() < s"
+               [style.background]="step() >= s ? 'linear-gradient(135deg,#14b8a6,#0d9488)' : 'transparent'"
+               [style.box-shadow]="step() >= s ? '0 4px 12px rgba(13,148,136,0.4)' : 'none'">
+            <svg *ngIf="step() > s" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+            </svg>
+            <span *ngIf="step() <= s">{{ s }}</span>
+          </div>
+          <span class="text-xs font-semibold mt-2"
+                [class.text-teal-700]="step() >= s"
+                [class.text-gray-400]="step() < s">
+            {{ s === 1 ? 'Paciente' : s === 2 ? 'Horario' : 'Confirmar' }}
+          </span>
+        </div>
+        <div *ngIf="!last" class="h-0.5 w-24 mx-2 mb-5 transition-all duration-500"
+             [class.bg-teal-500]="step() > s"
+             [class.bg-gray-200]="step() <= s"></div>
+      </ng-container>
+    </div>
+
+    <!-- ── STEP 1: Paciente ── -->
+    <div *ngIf="step() === 1" class="animate-fade-in">
+      <div class="bg-white rounded-3xl shadow-2xl p-8">
+        <h2 class="text-xl font-extrabold text-gray-900 mb-2">Seleccionar Paciente</h2>
+        <p class="text-sm text-gray-500 mb-6">Busca por nombre, correo o número de seguro.</p>
+
+        <!-- Search -->
+        <div class="relative mb-6">
+          <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+          <input type="text" [(ngModel)]="searchQuery" (ngModelChange)="onSearchInput()"
+            id="patient-search"
+            placeholder="Buscar paciente..."
+            class="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-2xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 outline-none transition-all text-sm font-medium"/>
+          <button *ngIf="selectedPatient()" (click)="clearPatient()"
+            class="absolute right-4 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors">
+            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Searching indicator -->
+        <div *ngIf="isSearching()" class="flex justify-center py-4">
+          <div class="w-8 h-8 border-4 border-teal-200 border-t-teal-500 rounded-full animate-spin"></div>
+        </div>
+
+        <!-- Results dropdown -->
+        <div *ngIf="searchResults().length > 0" class="mb-6 space-y-2 max-h-64 overflow-y-auto">
+          <div *ngFor="let patient of searchResults()" (click)="selectPatient(patient)"
+            class="flex items-center space-x-4 p-4 rounded-2xl border-2 border-gray-100 hover:border-teal-300 hover:bg-teal-50 cursor-pointer transition-all duration-200">
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-white font-extrabold text-sm flex-shrink-0"
+                 style="background: linear-gradient(135deg, #14b8a6, #0d9488);">{{ getInitials(patient) }}</div>
+            <div class="flex-1 min-w-0">
+              <p class="font-bold text-gray-900">{{ patient.name }} {{ patient.lastName }}</p>
+              <p class="text-xs text-gray-500">{{ patient.age }} años · {{ patient.bloodType }} · {{ patient.insuranceNumber }}</p>
+              <p class="text-xs text-gray-400">{{ patient.email }}</p>
+            </div>
+            <svg class="w-5 h-5 text-teal-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Selected patient card -->
+        <div *ngIf="selectedPatient()" class="rounded-2xl border-2 border-teal-400 p-5 mb-6"
+             style="background: linear-gradient(135deg, #f0fdfa, #ccfbf1);">
+          <div class="flex items-center space-x-4">
+            <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-white font-extrabold shadow-lg"
+                 style="background: linear-gradient(135deg, #14b8a6, #0d9488);">{{ getInitials(selectedPatient()!) }}</div>
+            <div class="flex-1">
+              <div class="flex items-center space-x-2 mb-1">
+                <p class="text-lg font-extrabold text-gray-900">{{ selectedPatient()!.name }} {{ selectedPatient()!.lastName }}</p>
+                <span class="px-2 py-0.5 bg-teal-600 text-white text-xs font-bold rounded-full">Seleccionado</span>
+              </div>
+              <p class="text-sm text-gray-600">{{ selectedPatient()!.age }} años · {{ selectedPatient()!.bloodType }} · {{ selectedPatient()!.gender === 'male' ? 'Masculino' : 'Femenino' }}</p>
+              <p class="text-xs text-gray-500 mt-1">{{ selectedPatient()!.insuranceNumber }} · {{ selectedPatient()!.phone }}</p>
+            </div>
+          </div>
+          <div *ngIf="selectedPatient()!.chronicConditions.length" class="mt-3 pt-3 border-t border-teal-200">
+            <p class="text-xs font-semibold text-teal-800 mb-1">Condiciones crónicas:</p>
+            <div class="flex flex-wrap gap-2">
+              <span *ngFor="let c of selectedPatient()!.chronicConditions"
+                class="px-2 py-0.5 bg-teal-100 text-teal-800 text-xs font-semibold rounded-full">{{ c }}</span>
+            </div>
+          </div>
+          <div *ngIf="selectedPatient()!.allergies.length" class="mt-2">
+            <p class="text-xs font-semibold text-red-700 mb-1">⚠️ Alergias:</p>
+            <div class="flex flex-wrap gap-2">
+              <span *ngFor="let a of selectedPatient()!.allergies"
+                class="px-2 py-0.5 bg-red-100 text-red-700 text-xs font-semibold rounded-full">{{ a }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Type of appointment -->
+        <div>
+          <label class="block text-sm font-bold text-gray-700 mb-3">Tipo de Consulta</label>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <button *ngFor="let entry of typeLabels" type="button"
+              (click)="form.type = entry[0]"
+              class="py-3 px-4 rounded-2xl border-2 font-semibold text-sm transition-all duration-200 hover:-translate-y-0.5"
+              [class.border-gray-200]="form.type !== entry[0]"
+              [class.text-gray-600]="form.type !== entry[0]"
+              [class.text-white]="form.type === entry[0]"
+              [style.border-color]="form.type === entry[0] ? typeColors[entry[0]] : ''"
+              [style.background]="form.type === entry[0] ? typeColors[entry[0]] : ''"
+              [style.box-shadow]="form.type === entry[0] ? '0 4px 12px ' + typeColors[entry[0]] + '55' : ''">
+              {{ entry[1] }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-end mt-6">
+        <button (click)="nextStep()" [disabled]="!step1Valid()" id="btn-step1-next"
+          class="px-8 py-3.5 text-white font-bold rounded-2xl shadow-xl transition-all duration-300 hover:-translate-y-0.5 disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none"
+          style="background: linear-gradient(135deg,#14b8a6,#0d9488);">
+          Siguiente → Horario
+        </button>
+      </div>
+    </div>
+
+    <!-- ── STEP 2: Horario ── -->
+    <div *ngIf="step() === 2" class="animate-fade-in">
+      <div class="bg-white rounded-3xl shadow-2xl p-8">
+        <h2 class="text-xl font-extrabold text-gray-900 mb-2">Fecha y Hora</h2>
+        <p class="text-sm text-gray-500 mb-6">Selecciona la fecha y horario de la cita. Lunes a Sábado únicamente.</p>
+
+        <div class="space-y-6">
+          <!-- Date -->
+          <div>
+            <label class="block text-sm font-bold text-gray-700 mb-2">Fecha de la Cita</label>
+            <input type="date" [(ngModel)]="form.date" [min]="getTodayMin()"
+              class="w-full px-4 py-3.5 border-2 border-gray-200 rounded-2xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 outline-none transition-all text-sm font-semibold"/>
+          </div>
+
+          <!-- Time range -->
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-bold text-gray-700 mb-2">Hora de Inicio</label>
+              <input type="time" [(ngModel)]="form.startTime" min="07:00" max="19:30"
+                class="w-full px-4 py-3.5 border-2 border-gray-200 rounded-2xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 outline-none transition-all text-sm font-semibold"/>
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-gray-700 mb-2">Hora de Fin</label>
+              <input type="time" [(ngModel)]="form.endTime" min="07:30" max="20:00"
+                class="w-full px-4 py-3.5 border-2 border-gray-200 rounded-2xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 outline-none transition-all text-sm font-semibold"/>
+            </div>
+          </div>
+
+          <!-- Priority -->
+          <div>
+            <label class="block text-sm font-bold text-gray-700 mb-3">Prioridad</label>
+            <div class="grid grid-cols-2 gap-4">
+              <button type="button" (click)="form.priority='normal'"
+                class="py-3 px-4 rounded-2xl border-2 font-semibold text-sm transition-all duration-200"
+                [class.border-teal-500]="form.priority==='normal'"
+                [class.bg-teal-50]="form.priority==='normal'"
+                [class.text-teal-700]="form.priority==='normal'"
+                [class.border-gray-200]="form.priority!=='normal'"
+                [class.text-gray-500]="form.priority!=='normal'">
+                🟢 Normal
+              </button>
+              <button type="button" (click)="form.priority='urgent'"
+                class="py-3 px-4 rounded-2xl border-2 font-semibold text-sm transition-all duration-200"
+                [class.border-red-500]="form.priority==='urgent'"
+                [class.bg-red-50]="form.priority==='urgent'"
+                [class.text-red-700]="form.priority==='urgent'"
+                [class.border-gray-200]="form.priority!=='urgent'"
+                [class.text-gray-500]="form.priority!=='urgent'">
+                🔴 Urgente
+              </button>
+            </div>
+          </div>
+
+          <!-- Notes -->
+          <div>
+            <label class="block text-sm font-bold text-gray-700 mb-2">Notas previas (opcional)</label>
+            <textarea [(ngModel)]="form.notes" rows="3"
+              placeholder="Ej: Trae resultados de laboratorio, control mensual..."
+              class="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 outline-none transition-all resize-none text-sm"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-between mt-6">
+        <button (click)="prevStep()"
+          class="px-6 py-3.5 border-2 border-gray-200 text-gray-600 font-bold rounded-2xl hover:bg-gray-50 transition-all text-sm">
+          ← Atrás
+        </button>
+        <button (click)="nextStep()" [disabled]="!step2Valid()" id="btn-step2-next"
+          class="px-8 py-3.5 text-white font-bold rounded-2xl shadow-xl transition-all duration-300 hover:-translate-y-0.5 disabled:opacity-40 disabled:cursor-not-allowed"
+          style="background: linear-gradient(135deg,#14b8a6,#0d9488);">
+          Siguiente → Confirmar
+        </button>
+      </div>
+    </div>
+
+    <!-- ── STEP 3: Confirmar ── -->
+    <div *ngIf="step() === 3" class="animate-fade-in">
+      <div class="bg-white rounded-3xl shadow-2xl p-8">
+        <h2 class="text-xl font-extrabold text-gray-900 mb-2">Confirmar Cita</h2>
+        <p class="text-sm text-gray-500 mb-6">Revisa la información antes de confirmar.</p>
+
+        <div class="space-y-4">
+          <!-- Patient summary -->
+          <div class="rounded-2xl p-5 border border-teal-200" style="background:linear-gradient(135deg,#f0fdfa,#ccfbf1);">
+            <p class="text-xs font-bold text-teal-700 uppercase tracking-wider mb-3">Paciente</p>
+            <div class="flex items-center space-x-3">
+              <div class="w-12 h-12 rounded-xl flex items-center justify-center text-white font-extrabold text-sm"
+                   style="background:linear-gradient(135deg,#14b8a6,#0d9488)">{{ getInitials(selectedPatient()!) }}</div>
+              <div>
+                <p class="font-extrabold text-gray-900">{{ selectedPatient()!.name }} {{ selectedPatient()!.lastName }}</p>
+                <p class="text-sm text-gray-600">{{ selectedPatient()!.age }} años · {{ selectedPatient()!.insuranceNumber }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Appointment summary -->
+          <div class="rounded-2xl p-5 border border-gray-200 space-y-3">
+            <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Detalles de la Cita</p>
+            <div class="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
+              <div>
+                <p class="text-gray-500 text-xs font-semibold uppercase mb-0.5">Tipo</p>
+                <span class="inline-block px-3 py-1 text-white text-xs font-bold rounded-full"
+                      [style.background]="typeColors[form.type]">{{ getSelectedTypeLabel() }}</span>
+              </div>
+              <div>
+                <p class="text-gray-500 text-xs font-semibold uppercase mb-0.5">Prioridad</p>
+                <span class="font-bold" [class.text-teal-700]="form.priority==='normal'" [class.text-red-600]="form.priority==='urgent'">
+                  {{ form.priority === 'normal' ? '🟢 Normal' : '🔴 Urgente' }}
+                </span>
+              </div>
+              <div>
+                <p class="text-gray-500 text-xs font-semibold uppercase mb-0.5">Fecha</p>
+                <p class="font-bold text-gray-900">{{ form.date | date:'fullDate' : '' : 'es' }}</p>
+              </div>
+              <div>
+                <p class="text-gray-500 text-xs font-semibold uppercase mb-0.5">Horario</p>
+                <p class="font-bold text-gray-900">{{ form.startTime }} – {{ form.endTime }}</p>
+              </div>
+            </div>
+            <div *ngIf="form.notes" class="pt-3 border-t border-gray-100">
+              <p class="text-gray-500 text-xs font-semibold uppercase mb-1">Notas</p>
+              <p class="text-sm text-gray-700">{{ form.notes }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-between mt-6">
+        <button (click)="prevStep()"
+          class="px-6 py-3.5 border-2 border-gray-200 text-gray-600 font-bold rounded-2xl hover:bg-gray-50 transition-all text-sm">
+          ← Atrás
+        </button>
+        <button (click)="submit()" id="btn-confirm-appointment"
+          class="px-10 py-3.5 text-white font-extrabold rounded-2xl shadow-xl transition-all duration-300 hover:-translate-y-0.5 flex items-center space-x-2"
+          style="background: linear-gradient(135deg,#14b8a6,#0d9488);">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+          </svg>
+          <span>Confirmar Cita</span>
+        </button>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<style>
+@keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+.animate-fade-in { animation: fadeIn 0.25s ease-out; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.animate-spin { animation: spin 0.8s linear infinite; }
+</style>

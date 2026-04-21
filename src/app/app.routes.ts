@@ -21,6 +21,18 @@ export const routes: Routes = [
         loadComponent: () => import('./modules/doctor/calendar/doctor-calendar.component').then(m => m.DoctorCalendarComponent)
       },
       {
+        path: 'doctor/new-appointment',
+        canActivate: [authGuard],
+        data: { roles: ['doctor'] },
+        loadComponent: () => import('./modules/doctor/appointments/new-appointment/new-appointment.component').then(m => m.NewAppointmentComponent)
+      },
+      {
+        path: 'doctor/appointment/:id',
+        canActivate: [authGuard],
+        data: { roles: ['doctor'] },
+        loadComponent: () => import('./modules/doctor/appointments/appointment-detail/appointment-detail.component').then(m => m.AppointmentDetailComponent)
+      },
+      {
         path: 'patient',
         canActivate: [authGuard],
         data: { roles: ['patient'] },
