@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
-import { NgIf } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-footer',
-  standalone: true,
-  imports: [NgIf, FormsModule],
-  template: `
+    selector: 'app-footer',
+    imports: [FormsModule],
+    template: `
     <footer class="bg-secondary-900 text-white">
       <!-- Main Footer -->
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -51,7 +50,7 @@ import { FormsModule } from '@angular/forms';
               </a>
             </div>
           </div>
-
+    
           <!-- Quick Links -->
           <div>
             <h3 class="text-xl font-bold mb-6">Enlaces Rápidos</h3>
@@ -63,7 +62,7 @@ import { FormsModule } from '@angular/forms';
               <li><a href="#contacto" class="text-gray-400 hover:text-primary-400 transition-colors">Contacto</a></li>
             </ul>
           </div>
-
+    
           <!-- Services -->
           <div>
             <h3 class="text-xl font-bold mb-6">Especialidades</h3>
@@ -76,46 +75,48 @@ import { FormsModule } from '@angular/forms';
               <li><a href="#servicios" class="text-gray-400 hover:text-primary-400 transition-colors">Dermatología</a></li>
             </ul>
           </div>
-
+    
           <!-- Newsletter -->
           <div>
             <h3 class="text-xl font-bold mb-6">Boletín Informativo</h3>
             <p class="text-gray-400 mb-4">Suscríbete para recibir consejos de salud y novedades</p>
             <form (submit)="onSubscribe($event)" class="space-y-4">
-              <input type="email" 
-                     [(ngModel)]="email" 
-                     name="email"
-                     required
-                     class="w-full px-4 py-3 bg-secondary-800 border border-secondary-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-white"
-                     placeholder="Tu correo electrónico">
-              <button type="submit" 
-                      class="w-full bg-primary-600 hover:bg-primary-700 font-semibold px-6 py-3 rounded-lg transition-colors">
-                Suscribirse
-              </button>
-            </form>
-            <div *ngIf="showSuccess" class="mt-4 bg-green-600 text-white px-4 py-2 rounded-lg text-center">
-              ¡Gracias por suscribirte!
+              <input type="email"
+                [(ngModel)]="email"
+                name="email"
+                required
+                class="w-full px-4 py-3 bg-secondary-800 border border-secondary-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-white"
+                placeholder="Tu correo electrónico">
+                <button type="submit"
+                  class="w-full bg-primary-600 hover:bg-primary-700 font-semibold px-6 py-3 rounded-lg transition-colors">
+                  Suscribirse
+                </button>
+              </form>
+              @if (showSuccess) {
+                <div class="mt-4 bg-green-600 text-white px-4 py-2 rounded-lg text-center">
+                  ¡Gracias por suscribirte!
+                </div>
+              }
             </div>
           </div>
         </div>
-      </div>
-
-      <!-- Bottom Bar -->
-      <div class="border-t border-secondary-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <p class="text-gray-400">
-              © 2026 Clínica Vital. Todos los derechos reservados.
-            </p>
-            <div class="flex space-x-6">
-              <a href="#" class="text-gray-400 hover:text-primary-400 transition-colors">Política de Privacidad</a>
-              <a href="#" class="text-gray-400 hover:text-primary-400 transition-colors">Términos de Uso</a>
+    
+        <!-- Bottom Bar -->
+        <div class="border-t border-secondary-800">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+              <p class="text-gray-400">
+                © 2026 Clínica Vital. Todos los derechos reservados.
+              </p>
+              <div class="flex space-x-6">
+                <a href="#" class="text-gray-400 hover:text-primary-400 transition-colors">Política de Privacidad</a>
+                <a href="#" class="text-gray-400 hover:text-primary-400 transition-colors">Términos de Uso</a>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </footer>
-  `
+      </footer>
+    `
 })
 export class FooterComponent {
   email = '';

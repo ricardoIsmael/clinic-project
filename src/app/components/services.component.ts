@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NgFor } from '@angular/common';
+
 
 interface Service {
   icon: string;
@@ -9,10 +9,9 @@ interface Service {
 }
 
 @Component({
-  selector: 'app-services',
-  standalone: true,
-  imports: [NgFor],
-  template: `
+    selector: 'app-services',
+    imports: [],
+    template: `
     <section id="servicios" class="py-20 bg-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Header -->
@@ -31,28 +30,30 @@ interface Service {
             Ofrecemos una amplia gama de servicios médicos para cuidar de ti y tu familia
           </p>
         </div>
-
+    
         <!-- Services Grid -->
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <div *ngFor="let service of services" 
-               class="card-hover bg-white rounded-2xl p-8 border border-gray-100 shadow-lg">
-            <div class="{{service.color}} w-16 h-16 rounded-xl flex items-center justify-center mb-6">
-              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" [innerHTML]="service.icon">
-              </svg>
+          @for (service of services; track service) {
+            <div
+              class="card-hover bg-white rounded-2xl p-8 border border-gray-100 shadow-lg">
+              <div class="{{service.color}} w-16 h-16 rounded-xl flex items-center justify-center mb-6">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" [innerHTML]="service.icon">
+                </svg>
+              </div>
+              <h3 class="text-2xl font-bold text-secondary-900 mb-3">{{service.title}}</h3>
+              <p class="text-secondary-600 leading-relaxed">{{service.description}}</p>
+              <a href="#contacto" class="inline-flex items-center mt-6 text-primary-600 font-semibold hover:text-primary-700 transition-colors">
+                Saber más
+                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                </svg>
+              </a>
             </div>
-            <h3 class="text-2xl font-bold text-secondary-900 mb-3">{{service.title}}</h3>
-            <p class="text-secondary-600 leading-relaxed">{{service.description}}</p>
-            <a href="#contacto" class="inline-flex items-center mt-6 text-primary-600 font-semibold hover:text-primary-700 transition-colors">
-              Saber más
-              <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-              </svg>
-            </a>
-          </div>
+          }
         </div>
       </div>
     </section>
-  `
+    `
 })
 export class ServicesComponent {
   services: Service[] = [

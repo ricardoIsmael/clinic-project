@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NgFor } from '@angular/common';
+
 
 interface Feature {
   icon: string;
@@ -14,10 +14,9 @@ interface TeamMember {
 }
 
 @Component({
-  selector: 'app-features',
-  standalone: true,
-  imports: [NgFor],
-  template: `
+    selector: 'app-features',
+    imports: [],
+    template: `
     <section id="nosotros" class="py-20 bg-gradient-to-br from-secondary-50 to-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Why Choose Us -->
@@ -33,20 +32,22 @@ interface TeamMember {
               Comprometidos con tu <span class="text-primary-600">Bienestar</span>
             </h2>
           </div>
-
+    
           <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div *ngFor="let feature of features" 
-                 class="card-hover bg-white rounded-2xl p-8 text-center shadow-lg">
-              <div class="bg-primary-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
-                <svg class="w-10 h-10 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" [innerHTML]="feature.icon">
-                </svg>
+            @for (feature of features; track feature) {
+              <div
+                class="card-hover bg-white rounded-2xl p-8 text-center shadow-lg">
+                <div class="bg-primary-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <svg class="w-10 h-10 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" [innerHTML]="feature.icon">
+                  </svg>
+                </div>
+                <h3 class="text-xl font-bold text-secondary-900 mb-3">{{feature.title}}</h3>
+                <p class="text-secondary-600">{{feature.description}}</p>
               </div>
-              <h3 class="text-xl font-bold text-secondary-900 mb-3">{{feature.title}}</h3>
-              <p class="text-secondary-600">{{feature.description}}</p>
-            </div>
+            }
           </div>
         </div>
-
+    
         <!-- Team Section -->
         <div>
           <div class="text-center mb-16">
@@ -57,25 +58,27 @@ interface TeamMember {
               Profesionales altamente calificados dedicados a tu salud
             </p>
           </div>
-
+    
           <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div *ngFor="let member of team" 
-                 class="card-hover bg-white rounded-2xl overflow-hidden shadow-lg">
-              <div class="bg-gradient-to-br from-primary-400 to-primary-600 h-64 flex items-center justify-center">
-                <svg class="w-32 h-32 text-white/80" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
-                </svg>
+            @for (member of team; track member) {
+              <div
+                class="card-hover bg-white rounded-2xl overflow-hidden shadow-lg">
+                <div class="bg-gradient-to-br from-primary-400 to-primary-600 h-64 flex items-center justify-center">
+                  <svg class="w-32 h-32 text-white/80" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                  </svg>
+                </div>
+                <div class="p-6 text-center">
+                  <h3 class="text-xl font-bold text-secondary-900 mb-1">{{member.name}}</h3>
+                  <p class="text-primary-600 font-medium">{{member.role}}</p>
+                </div>
               </div>
-              <div class="p-6 text-center">
-                <h3 class="text-xl font-bold text-secondary-900 mb-1">{{member.name}}</h3>
-                <p class="text-primary-600 font-medium">{{member.role}}</p>
-              </div>
-            </div>
+            }
           </div>
         </div>
       </div>
     </section>
-  `
+    `
 })
 export class FeaturesComponent {
   features: Feature[] = [

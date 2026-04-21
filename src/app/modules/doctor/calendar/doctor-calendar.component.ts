@@ -20,11 +20,11 @@ interface AvailabilitySlot {
 }
 
 @Component({
-  selector: 'app-doctor-calendar',
-  standalone: true,
-  imports: [FullCalendarModule, CommonModule, FormsModule, DatePipe],
-  templateUrl: './doctor-calendar.component.html',
-  styleUrls: ['./doctor-calendar.component.css']
+    selector: 'app-doctor-calendar',
+    standalone: true,
+    imports: [FullCalendarModule, CommonModule, FormsModule, DatePipe],
+    templateUrl: './doctor-calendar.component.html',
+    styleUrls: ['./doctor-calendar.component.css']
 })
 export class DoctorCalendarComponent implements OnInit {
 

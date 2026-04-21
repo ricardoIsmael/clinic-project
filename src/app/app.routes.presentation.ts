@@ -8,18 +8,17 @@ import { ContactComponent } from './components/contact.component';
 import { FooterComponent } from './components/footer.component';
 
 @Component({
-  selector: 'app-presentation',
-  standalone: true,
-  imports: [
-    NavbarComponent,
-    HeroComponent,
-    ServicesComponent,
-    FeaturesComponent,
-    TestimonialsComponent,
-    ContactComponent,
-    FooterComponent
-  ],
-  template: `
+    selector: 'app-presentation',
+    imports: [
+        NavbarComponent,
+        HeroComponent,
+        ServicesComponent,
+        FeaturesComponent,
+        TestimonialsComponent,
+        ContactComponent,
+        FooterComponent
+    ],
+    template: `
     <app-navbar></app-navbar>
     <app-hero></app-hero>
     <app-services></app-services>

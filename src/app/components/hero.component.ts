@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
-import { NgIf } from '@angular/common';
+
 
 @Component({
-  selector: 'app-hero',
-  standalone: true,
-  imports: [NgIf],
-  template: `
+    selector: 'app-hero',
+    imports: [],
+    template: `
     <section id="inicio" class="relative min-h-screen flex items-center pt-20 overflow-hidden">
       <!-- Background -->
       <div class="absolute inset-0 bg-gradient-to-br from-primary-50 via-white to-secondary-50"></div>
