@@ -1,0 +1,302 @@
+<div class="min-h-screen" style="background: linear-gradient(135deg, #f0fdfa 0%, #ffffff 50%, #f8fafc 100%);">
+
+  <!-- ══════════════════════════════════════════════════════ HEADER -->
+  <header class="bg-white shadow-lg border-b-4 border-teal-500 sticky top-0 z-40">
+    <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <div class="flex items-center justify-between">
+        <!-- Brand -->
+        <div class="flex items-center space-x-4">
+          <div class="w-12 h-12 rounded-2xl flex items-center justify-center shadow-xl"
+               style="background: linear-gradient(135deg, #14b8a6, #0d9488);">
+            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
+          </div>
+          <div>
+            <h1 class="text-2xl font-bold text-gray-900">Panel de Administración</h1>
+            <p class="text-sm text-gray-500">Centro Médico ClinicCare · Control Central</p>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex items-center space-x-3">
+          <button (click)="generateReport()"
+            class="hidden md:flex items-center space-x-2 px-4 py-2.5 rounded-xl font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-all">
+            <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+            <span>Reportes</span>
+          </button>
+          
+          <button (click)="openModal()"
+            class="flex items-center space-x-2 px-5 py-2.5 rounded-xl font-semibold text-white text-sm shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl"
+            style="background: linear-gradient(135deg, #14b8a6, #0d9488);">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+            </svg>
+            <span>Nuevo Usuario</span>
+          </button>
+
+          <button (click)="logout()"
+            class="flex items-center space-x-2 px-4 py-2.5 rounded-xl font-semibold text-white text-sm transition-all duration-300 hover:-translate-y-0.5"
+            style="background: linear-gradient(135deg, #ef4444, #dc2626);">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+            </svg>
+            <span>Salir</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════ MAIN -->
+  <main class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- KPI Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      @for (kpi of kpis; track kpi.label) {
+        <div class="bg-white rounded-2xl shadow-lg p-6 border-l-4 hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+             [ngClass]="{
+               'border-teal-500': kpi.color === 'teal',
+               'border-blue-500': kpi.color === 'blue',
+               'border-amber-500': kpi.color === 'amber',
+               'border-violet-500': kpi.color === 'violet'
+             }">
+          <div class="flex items-center justify-between mb-4">
+            <div class="p-3 rounded-xl" [ngClass]="{
+              'bg-teal-50 text-teal-600': kpi.color === 'teal',
+              'bg-blue-50 text-blue-600': kpi.color === 'blue',
+              'bg-amber-50 text-amber-600': kpi.color === 'amber',
+              'bg-violet-50 text-violet-600': kpi.color === 'violet'
+            }">
+              @if (kpi.icon === 'stethoscope') {
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
+              } @else if (kpi.icon === 'users') {
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+              } @else if (kpi.icon === 'calendar') {
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              } @else {
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              }
+            </div>
+            <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">{{ kpi.label }}</span>
+          </div>
+          <div>
+            <h3 class="text-3xl font-extrabold text-gray-900">
+              @if (kpi.isCurrency) { {{ kpi.value | currency:'USD':'symbol':'1.0-0' }} } 
+              @else { {{ kpi.value }} }
+            </h3>
+            <p class="text-sm font-medium" [ngClass]="{
+              'text-teal-600': kpi.color === 'teal',
+              'text-blue-600': kpi.color === 'blue',
+              'text-amber-600': kpi.color === 'amber',
+              'text-violet-600': kpi.color === 'violet'
+            }">{{ kpi.trend }}</p>
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Recent Users Table -->
+      <div class="lg:col-span-2 bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
+        <div class="px-8 py-6 border-b border-gray-100 flex items-center justify-between">
+          <h2 class="text-xl font-bold text-gray-900">Usuarios Recientes</h2>
+          <button class="text-teal-600 font-semibold text-sm hover:underline">Ver todos</button>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left">
+            <thead>
+              <tr class="bg-slate-50 text-slate-500 text-xs font-bold uppercase tracking-wider">
+                <th class="px-8 py-4">Usuario</th>
+                <th class="px-6 py-4">Rol</th>
+                <th class="px-6 py-4">Fecha</th>
+                <th class="px-6 py-4 text-center">Estado</th>
+                <th class="px-8 py-4 text-right">Acción</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+              @for (user of recentUsers(); track user.id) {
+                <tr class="hover:bg-slate-50/50 transition-colors">
+                  <td class="px-8 py-4">
+                    <div class="flex items-center space-x-3">
+                      <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center font-bold text-slate-500">
+                        {{ user.name[0] }}
+                      </div>
+                      <div>
+                        <p class="text-sm font-bold text-gray-900">{{ user.name }}</p>
+                        <p class="text-xs text-gray-500">{{ user.email }}</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4">
+                    <span [class]="getRoleBadgeClass(user.role)">{{ user.role }}</span>
+                  </td>
+                  <td class="px-6 py-4 text-sm text-gray-500">
+                    {{ user.joinedAt | date:'mediumDate' }}
+                  </td>
+                  <td class="px-6 py-4 text-center">
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium"
+                          [ngClass]="user.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
+                      {{ user.status === 'active' ? 'Activo' : 'Inactivo' }}
+                    </span>
+                  </td>
+                  <td class="px-8 py-4 text-right">
+                    <button (click)="toggleUserStatus(user)" 
+                            class="p-2 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-all">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+                      </svg>
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Activity Feed & Mini Chart -->
+      <div class="space-y-8">
+        <!-- Chart Simulation -->
+        <div class="bg-white rounded-3xl shadow-xl p-6 border border-gray-100">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-lg font-bold text-gray-900">Citas Semanales</h2>
+            <span class="text-xs font-bold text-teal-600 bg-teal-50 px-2 py-1 rounded-lg">+14%</span>
+          </div>
+          <div class="flex items-end justify-between h-32 px-2">
+            @for (h of [45, 60, 30, 85, 45, 70, 40]; track $index) {
+              <div class="w-6 bg-teal-100 rounded-t-lg hover:bg-teal-500 transition-all cursor-pointer relative group"
+                   [style.height.%]="h">
+                <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                  {{h}} citas
+                </div>
+              </div>
+            }
+          </div>
+          <div class="flex justify-between mt-4 px-1 text-[10px] font-bold text-slate-400 uppercase">
+            <span>Lun</span><span>Mar</span><span>Mie</span><span>Jue</span><span>Vie</span><span>Sab</span><span>Dom</span>
+          </div>
+        </div>
+
+        <!-- Activity Feed -->
+        <div class="bg-white rounded-3xl shadow-xl p-6 border border-gray-100">
+          <h2 class="text-lg font-bold text-gray-900 mb-6">Actividad Reciente</h2>
+          <div class="space-y-6">
+            @for (act of activities; track act.id) {
+              <div class="flex space-x-4">
+                <div class="w-10 h-10 rounded-xl flex-shrink-0 flex items-center justify-center"
+                     [ngClass]="{
+                       'bg-teal-50 text-teal-600': act.color === 'teal',
+                       'bg-blue-50 text-blue-600': act.color === 'blue',
+                       'bg-violet-50 text-violet-600': act.color === 'violet',
+                       'bg-red-50 text-red-600': act.color === 'red'
+                     }">
+                  @if (act.icon === 'calendar') {
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                  } @else if (act.icon === 'plus-circle') {
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
+                  } @else {
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                  }
+                </div>
+                <div>
+                  <p class="text-sm font-bold text-gray-900 leading-snug">
+                    <span class="text-teal-600">{{ act.user }}</span> {{ act.action }}
+                  </p>
+                  <p class="text-[11px] text-gray-400 font-medium uppercase mt-1">{{ act.time }}</p>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ══════════════════════════════════════════════════════ MODAL: NUEVO USUARIO -->
+  @if (showAddUserModal()) {
+    <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+         (click)="closeModal()">
+      <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md transform transition-all animate-in fade-in zoom-in duration-300"
+           (click)="$event.stopPropagation()">
+        
+        <!-- Modal Header -->
+        <div class="px-8 pt-8 pb-6 border-b border-gray-100 flex items-center justify-between">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-teal-50 flex items-center justify-center">
+              <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900">Nuevo Usuario</h3>
+          </div>
+          <button (click)="closeModal()" class="text-slate-400 hover:text-slate-600 p-2 rounded-full hover:bg-slate-100">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <!-- Modal Body -->
+        <form [formGroup]="userForm" (ngSubmit)="onSubmitUser()" class="p-8 space-y-6">
+          <div>
+            <label class="block text-sm font-bold text-slate-700 mb-2">Nombre Completo</label>
+            <input type="text" formControlName="name" placeholder="Ej: Dr. Julian Perez"
+              class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-teal-500 focus:bg-white outline-none transition-all text-sm"/>
+            @if (userForm.get('name')?.touched && userForm.get('name')?.invalid) {
+              <p class="text-red-500 text-[10px] mt-1 font-bold">Nombre inválido (min. 3 caracteres)</p>
+            }
+          </div>
+
+          <div>
+            <label class="block text-sm font-bold text-slate-700 mb-2">Correo Electrónico</label>
+            <input type="email" formControlName="email" placeholder="julian.perez@clinic.com"
+              class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-teal-500 focus:bg-white outline-none transition-all text-sm"/>
+            @if (userForm.get('email')?.touched && userForm.get('email')?.invalid) {
+              <p class="text-red-500 text-[10px] mt-1 font-bold">Email inválido</p>
+            }
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-bold text-slate-700 mb-2">Rol del Sistema</label>
+              <select formControlName="role" 
+                class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-teal-500 focus:bg-white outline-none transition-all text-sm">
+                <option value="doctor">Médico</option>
+                <option value="nurse">Enfermería</option>
+                <option value="admin">Administrador</option>
+                <option value="patient">Paciente</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-slate-700 mb-2">Estado</label>
+              <select formControlName="status" 
+                class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-teal-500 focus:bg-white outline-none transition-all text-sm">
+                <option value="active">Activo</option>
+                <option value="inactive">Inactivo</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="pt-4 flex space-x-3">
+            <button type="button" (click)="closeModal()"
+              class="flex-1 py-3.5 border-2 border-slate-100 text-slate-500 font-bold rounded-xl hover:bg-slate-50 transition-all text-sm">
+              Cancelar
+            </button>
+            <button type="submit" [disabled]="userForm.invalid || isSubmitting()"
+              class="flex-1 py-3.5 text-white font-bold rounded-xl shadow-lg transition-all flex items-center justify-center space-x-2 disabled:opacity-50 disabled:translate-y-0"
+              [style.background]="'linear-gradient(135deg, #14b8a6, #0d9488)'">
+              @if (isSubmitting()) {
+                <svg class="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                <span>Guardando...</span>
+              } @else {
+                <span>Crear Usuario</span>
+              }
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+</div>

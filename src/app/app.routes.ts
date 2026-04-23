@@ -42,13 +42,13 @@ export const routes: Routes = [
         path: 'admin',
         canActivate: [authGuard],
         data: { roles: ['admin'] },
-        loadComponent: () => import('./modules/dashboard/admin-placeholder.component').then(m => m.AdminPlaceholderComponent)
+        loadComponent: () => import('./modules/dashboard/admin-dashboard.component').then(m => m.AdminDashboardComponent)
       },
       {
         path: 'nurse',
         canActivate: [authGuard],
         data: { roles: ['nurse'] },
-        loadComponent: () => import('./modules/dashboard/nurse-placeholder.component').then(m => m.NursePlaceholderComponent)
+        loadComponent: () => import('./modules/dashboard/nurse-dashboard.component').then(m => m.NurseDashboardComponent)
       },
       {
         path: '',

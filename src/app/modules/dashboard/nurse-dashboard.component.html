@@ -1,0 +1,255 @@
+<div class="min-h-screen" style="background: linear-gradient(135deg, #f0fdfa 0%, #ffffff 50%, #f1f5f9 100%);">
+
+  <!-- ══════════════════════════════════════════════════════ HEADER -->
+  <header class="bg-white shadow-lg border-b-4 border-blue-500 sticky top-0 z-40">
+    <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <div class="flex items-center justify-between">
+        <!-- Brand -->
+        <div class="flex items-center space-x-4">
+          <div class="w-12 h-12 rounded-2xl flex items-center justify-center shadow-xl"
+               style="background: linear-gradient(135deg, #3b82f6, #2563eb);">
+            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+            </svg>
+          </div>
+          <div>
+            <h1 class="text-2xl font-bold text-gray-900">Panel de Enfermería</h1>
+            <p class="text-sm text-gray-500">Unidad de Triaje y Atención Inmediata</p>
+          </div>
+        </div>
+
+        <!-- Notification Bell (Mobile visible) -->
+        <div class="flex items-center space-x-3">
+          <div class="relative p-2.5 bg-slate-100 rounded-xl cursor-pointer hover:bg-slate-200 transition-all group">
+            <svg class="w-6 h-6 text-slate-500 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 00-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+            </svg>
+            <span class="absolute top-0 right-0 w-3 h-3 bg-red-500 border-2 border-white rounded-full"></span>
+          </div>
+
+          <button (click)="logout()"
+            class="flex items-center space-x-2 px-4 py-2.5 rounded-xl font-semibold text-white text-sm transition-all duration-300 hover:-translate-y-0.5"
+            style="background: linear-gradient(135deg, #ef4444, #dc2626);">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+            </svg>
+            <span>Salir</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════ MAIN -->
+  <main class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      
+      <!-- Left Column: Appointments (Span 3) -->
+      <div class="lg:col-span-3 space-y-6">
+        
+        <!-- Welcome Card -->
+        <div class="bg-white rounded-3xl shadow-xl p-8 border border-gray-100 flex flex-col md:flex-row items-center justify-between relative overflow-hidden">
+          <div class="z-10 text-center md:text-left">
+            <h2 class="text-3xl font-extrabold text-gray-900 mb-2">Buen día, Enf. Maria</h2>
+            <p class="text-slate-500 font-medium max-w-md">Hay <span class="text-blue-600 font-bold">{{ appointments().length }} pacientes</span> programados para hoy. Recuerda completar el triaje antes de cada consulta.</p>
+          </div>
+          <div class="mt-6 md:mt-0 z-10">
+            <button (click)="openVitalsModal('')"
+              class="px-8 py-4 bg-blue-600 text-white font-bold rounded-2xl shadow-lg hover:shadow-blue-200 hover:-translate-y-1 transition-all duration-300">
+              Registrar Signos Vitales
+            </button>
+          </div>
+          <!-- Decorative BG -->
+          <div class="absolute -right-20 -top-20 w-64 h-64 bg-blue-50 rounded-full opacity-50"></div>
+          <div class="absolute -left-10 -bottom-10 w-40 h-40 bg-teal-50 rounded-full opacity-30"></div>
+        </div>
+
+        <!-- Appointments List -->
+        <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
+          <div class="px-8 py-6 border-b border-gray-100 flex items-center justify-between bg-slate-50/50">
+            <div class="flex items-center space-x-3">
+              <h2 class="text-xl font-bold text-gray-900">Agenda del Día</h2>
+              <span class="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-lg font-bold">{{ appointments().length }}</span>
+            </div>
+            <div class="flex items-center space-x-4">
+              <div class="flex -space-x-2">
+                @for (i of [1,2,3]; track i) {
+                  <div class="w-8 h-8 rounded-full border-2 border-white bg-slate-200"></div>
+                }
+              </div>
+              <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">En turno ahora</p>
+            </div>
+          </div>
+          
+          <div class="divide-y divide-gray-100">
+            @for (appt of appointments(); track appt.id) {
+              <div class="p-6 hover:bg-slate-50/80 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="flex items-center space-x-5">
+                  <div class="text-center w-16">
+                    <p class="text-lg font-black text-gray-900 leading-none">{{ appt.time }}</p>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Hora Cita</p>
+                  </div>
+                  <div class="h-10 w-1 bg-slate-100 rounded-full"></div>
+                  <div>
+                    <h3 class="text-lg font-bold text-gray-900 leading-tight">{{ appt.patient }}</h3>
+                    <p class="text-sm text-slate-500">{{ appt.doctor }} · <span class="text-blue-600 font-medium">{{ appt.room }}</span></p>
+                  </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                  <span [class]="getStatusClass(appt.status)">{{ appt.status }}</span>
+                  
+                  <div class="flex items-center space-x-2">
+                    @if (appt.status !== 'attended') {
+                      <button (click)="openVitalsModal(appt.patient)"
+                              class="p-2.5 rounded-xl bg-slate-100 text-slate-600 hover:bg-blue-50 hover:text-blue-600 transition-all"
+                              title="Signos Vitales">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                      </button>
+                      <button (click)="markAsAttended(appt)"
+                              class="px-4 py-2.5 bg-teal-500 text-white font-bold rounded-xl shadow-md hover:bg-teal-600 transition-all text-sm">
+                        Completar
+                      </button>
+                    } @else {
+                      <svg class="w-8 h-8 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                    }
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Sidebar -->
+      <div class="space-y-8">
+        
+        <!-- Doctor Status -->
+        <div class="bg-white rounded-3xl shadow-xl p-6 border border-gray-100">
+          <h3 class="text-lg font-bold text-gray-900 mb-5">Estado Médico</h3>
+          <div class="space-y-5">
+            @for (doc of doctors(); track doc.name) {
+              <div class="flex items-center justify-between p-3 rounded-2xl border border-transparent hover:border-slate-100 hover:bg-slate-50 transition-all">
+                <div class="flex items-center space-x-3">
+                  <div class="w-10 h-10 rounded-full bg-slate-200 border-2 border-white shadow-sm"></div>
+                  <div>
+                    <p class="text-sm font-bold text-gray-900 leading-tight">{{ doc.name }}</p>
+                    <p class="text-[10px] text-slate-500 font-medium uppercase">{{ doc.specialty }}</p>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <div class="flex items-center justify-end">
+                    <span [class]="getDoctorStatusClass(doc.status)"></span>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">{{ doc.status }}</span>
+                  </div>
+                  <p class="text-[10px] font-black text-blue-600 mt-1">{{ doc.nextSlot }}</p>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Waiting Room Notifications -->
+        <div class="bg-slate-900 rounded-3xl shadow-xl p-6 text-white overflow-hidden relative">
+          <h3 class="text-lg font-bold mb-5 flex items-center">
+            <span class="w-2 h-2 bg-red-500 rounded-full mr-2 animate-ping"></span>
+            Alertas en Tiempo Real
+          </h3>
+          <div class="space-y-6 relative z-10">
+            @for (notif of notifications(); track notif.id) {
+              <div class="flex space-x-3 group">
+                <div class="w-1 h-auto rounded-full group-hover:scale-y-110 transition-transform"
+                     [ngClass]="{
+                       'bg-blue-500': notif.type === 'info',
+                       'bg-amber-500': notif.type === 'warning',
+                       'bg-red-500': notif.type === 'urgent'
+                     }"></div>
+                <div>
+                  <p class="text-sm font-medium text-slate-300 leading-snug group-hover:text-white transition-colors">
+                    {{ notif.message }}
+                  </p>
+                  <p class="text-[10px] font-bold text-slate-500 uppercase mt-1">{{ notif.time }}</p>
+                </div>
+              </div>
+            }
+          </div>
+          <!-- Abstract Background Pattern -->
+          <div class="absolute bottom-0 right-0 opacity-10 pointer-events-none">
+            <svg width="120" height="120" viewBox="0 0 100 100"><circle cx="80" cy="80" r="40" fill="white"/></svg>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- ══════════════════════════════════════════════════════ MODAL: SIGNOS VITALES -->
+  @if (showVitalsModal()) {
+    <div class="fixed inset-0 bg-slate-900/70 backdrop-blur-md flex items-center justify-center z-50 p-4"
+         (click)="closeVitalsModal()">
+      <div class="bg-white rounded-[2rem] shadow-2xl w-full max-w-lg transform transition-all overflow-hidden"
+           (click)="$event.stopPropagation()">
+        
+        <!-- Modal Header -->
+        <div class="bg-blue-600 p-8 text-white">
+          <div class="flex items-center justify-between mb-4">
+            <div class="p-3 bg-white/20 rounded-2xl">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+              </svg>
+            </div>
+            <button (click)="closeVitalsModal()" class="p-2 hover:bg-white/10 rounded-full transition-colors">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+          </div>
+          <h3 class="text-2xl font-black">Registro de Triaje</h3>
+          <p class="text-blue-100 font-medium">Paciente: {{ selectedPatient() || 'Nuevo Registro' }}</p>
+        </div>
+
+        <!-- Modal Body -->
+        <form [formGroup]="vitalsForm" (ngSubmit)="onSubmitVitals()" class="p-8 space-y-6">
+          <div class="grid grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-bold text-slate-600 mb-2 uppercase tracking-wide">Temperatura (°C)</label>
+              <input type="number" formControlName="temp" placeholder="36.5"
+                class="w-full px-4 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-blue-500 focus:bg-white outline-none transition-all font-bold text-lg"/>
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-slate-600 mb-2 uppercase tracking-wide">P. Arterial (mmHg)</label>
+              <input type="text" formControlName="pressure" placeholder="120/80"
+                class="w-full px-4 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-blue-500 focus:bg-white outline-none transition-all font-bold text-lg"/>
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-slate-600 mb-2 uppercase tracking-wide">F. Cardíaca (LPM)</label>
+              <input type="number" formControlName="heartRate" placeholder="72"
+                class="w-full px-4 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-blue-500 focus:bg-white outline-none transition-all font-bold text-lg"/>
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-slate-600 mb-2 uppercase tracking-wide">Saturación (%)</label>
+              <input type="number" formControlName="oxygen" placeholder="98"
+                class="w-full px-4 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-blue-500 focus:bg-white outline-none transition-all font-bold text-lg"/>
+            </div>
+          </div>
+
+          <div class="pt-4 flex space-x-4">
+            <button type="button" (click)="closeVitalsModal()"
+              class="flex-1 py-4 border-2 border-slate-100 text-slate-400 font-black rounded-2xl hover:bg-slate-50 transition-all uppercase tracking-widest text-xs">
+              Cancelar
+            </button>
+            <button type="submit" [disabled]="vitalsForm.invalid || isSubmittingVitals()"
+              class="flex-1 py-4 text-white font-black rounded-2xl shadow-xl transition-all flex items-center justify-center space-x-2 uppercase tracking-widest text-xs"
+              [style.background]="'linear-gradient(135deg, #3b82f6, #2563eb)'">
+              @if (isSubmittingVitals()) {
+                <svg class="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+              } @else {
+                <span>Guardar y Notificar Médico</span>
+              }
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+</div>
