@@ -36,7 +36,7 @@ export const routes: Routes = [
         path: 'patient',
         canActivate: [authGuard],
         data: { roles: ['patient'] },
-        loadComponent: () => import('./modules/dashboard/patient-placeholder.component').then(m => m.PatientPlaceholderComponent)
+        loadComponent: () => import('./modules/patient/portal/patient-portal.component').then(m => m.PatientPortalComponent)
       },
       {
         path: 'admin',
